@@ -1,23 +1,27 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from 'react';
+import AuthPage from './AuthPage';
+import TodoPage from './TodoPage';
 
 function App() {
+  const [userId, setUserId] = useState(localStorage.getItem('userId'));
+
+  const handleLogin = (id) => {
+    localStorage.setItem('userId', id);
+    setUserId(id);
+  };
+  const handleLogout = () => {
+    localStorage.removeItem('userId');
+    setUserId(null);
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div style={{ maxWidth: 800, margin: '40px auto' }}>
+      <h1>Simple Todo App</h1>
+      {userId ? (
+        <TodoPage userId={userId} onLogout={handleLogout} />
+      ) : (
+        <AuthPage onSuccess={handleLogin} />
+      )}
     </div>
   );
 }
